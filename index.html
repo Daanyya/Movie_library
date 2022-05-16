@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<title>Фильмотека</title>
+	</head>
+	<body>
+		<div class="Header_container">
+			<div class="Header">
+				<img src="img/Logo.png">
+				<div class="Header_el" id="add_el">
+					<img src="img/Space_icon.png">
+					<img src="img/Add_icon.png" id="add">
+					<p>Новый фильм</p>
+				</div>
+				<div class="Header_el" id="filter_el">
+					<img src="img/Space_icon.png">
+					<img src="img/Filter_icon.png" id="filter">
+					<p>Фильтр </p>
+				</div>
+				<div class="Header_el" id="home_el">
+					<img src="img/Space_icon.png">
+					<img src="img/Home_icon.png" id="home">
+					<p>Главная</p>
+				</div>
+				<!--<div class="Header_el" id="search_el">
+					<img src="img/Space_icon.png">
+					<input type="text" placeholder="Поиск">
+					<img src="img/Search_icon.png">
+				</div>-->
+			</div>
+		</div>
+		
+		<div class="Filter_container" id="filter_container">
+			<div class="Filter">
+				<h2>Фильтр</h2>
+				<div>
+					<label>Дата выхода</label>
+					<p>от</p>
+					<input id="filter_date_input_1" type="date" min="1900-01-01" max="">
+					<p>до</p>
+					<input id="filter_date_input_2" type="date" min="" max="">
+				</div>
+				<div>
+					<label>Жанр</label>
+					<select id="filter_genre_input">
+						<option value="0">Не выбрано</option>
+					</select>
+				</div>
+				<div>
+					<label>Страна</label>
+					<select id="filter_country_input">
+						<option value="0">Не выбрано</option>
+					</select>
+				</div>
+				<div>
+					<button id="go_filter">Применить</button>
+					<button id="clear_filter">Сбросить</button>
+					<button id="return_home">Вернуться</button>
+				</div>
+			</div>
+		</div>
+
+		<div class="Container" id="main_container">
+
+			<div class="Add_form" id="show_add_form">
+				<img src="img/No_film.png" id="poster_preview">
+				<form onsubmit="false" id="form">
+					<div>
+						<label>Загрузи обложку фильма</label>
+						<input type="file" id="poster_input" accept="image/png, image/jpeg" required>
+					</div>
+					<div>
+						<label>Название</label>
+						<input type="text" id="name_input" required>
+					</div>
+					<div>
+						<label>Дата выхода</label>
+						<input id="date_input" type="date" min="1900-01-01" max="" required>
+					</div>
+					<div>
+						<label>Страна</label>
+						<input type="text" id="country_input" required>
+					</div>
+					<div>
+						<label>Жанр</label>
+						<input type="text" id="genre_input" required>
+					</div>
+					<div>
+						<label>Режиссёр (укажи через запятую)</label>
+						<input type="text" id="director_input" required>
+					</div>
+					<div>
+						<label>Сценарий</label>
+						<textarea id="scenario_input" cols="21" rows="8"></textarea>
+					</div>
+					<div>
+						<label>Продюссер</label>
+						<input type="text" id="producer_input" required>
+					</div>
+					<div>
+						<label>Оператор</label>
+						<input type="text" id="operator_input" required>
+					</div>
+					<div>
+						<label>Композитор</label>
+						<input type="text" id="composer_input" required>
+					</div>
+					<div>
+						<label>Бюджет</label>
+						<input type="text" id="budget_input" required>
+					</div>
+					<div>
+						<label>Мировые сборы</label>
+						<input type="number" id="fees_input" required>
+					</div>
+					<div>
+						<label>Рейтинг возраста</label>
+						<input type="number" min="0" max="18" id="rating_input" required>
+					</div>
+					<div>
+						<label>Длительность</label>
+						<input type="time" id="time_input" required>
+					</div>
+				</form>
+				<button id="save_button">Добавить фильм</button>
+				<p id="error"></p>
+			</div>
+
+			<div class="Film_added" id="show_correct">
+				<p>Фильм успешно создан</p>
+				<img src="img/Added.png">
+				<button id="ok">Отлично!</button>
+			</div>
+
+			<div class="Movie_view" id="show_movie_view">
+				<div class="Movie">
+					<div class="Intro" id="intro_container"></div>
+					<div class="Content">
+						<p id="date_view">Дата выхода : </p>
+						<p id="country_view">Страна : </p>
+						<p id="genre_view">Жанр : </p>
+						<p id="director_view">Режиссёр : </p>
+						<p id="scenario_view">Сценарий : </p>
+						<p id="producer_view">Продюссер : </p>
+						<p id="operator_view">Оператор : </p>
+						<p id="composer_view">Композитор : </p>
+						<p id="budget_view">Бюджет : </p>
+						<p id="fees_view">Мировые сборы : </p>
+						<p id="rating_view">Рейтинг возраста : </p>
+						<p id="time_preview">Длительность : </p>
+					</div>
+				</div>
+
+				<hr id="my_comment_line">
+
+				<div class="My_comment" id="show_my_comment">
+					<div id="my_name">
+						<label>Ваше имя : </label>
+						<input id="comment_input_name" type="text" placeholder="например Даня">
+					</div>
+					<div id="my_comment">
+						<label>Ваш комментарий</label>
+						<textarea id="comment_input_text" cols="30" rows="10"></textarea>
+					</div>
+					<div id="my_rating">
+						<label>Ваша оценка :</label>
+						<p>0</p>
+						<input id="comment_input_rating" type="range" min="0" max="10" step="1" value="5">
+						<p>10</p>
+					</div>
+					<button id="send_comment">Оставить комментарий</button>
+				</div>
+
+				<hr>
+				<h2>Комментарии</h2>
+
+				<div class="Movie_comments" id="movie_comments_container">
+					<div class="Comment">
+						<p id="comment_autor">Автор(оценка 10)</p>
+						<p id="comment_content">Содержание</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</body>
+</html>
+<script src="script.js" type="module"></script>
