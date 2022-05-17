@@ -154,9 +154,7 @@ form > div {
 
 .Filter_container {
 	display: none;
-	width: 200px;
-	margin: 0 40%;
-	position: fixed;
+	margin-top: 64px;
 	border: 4px solid;
 }
 
@@ -254,7 +252,11 @@ h2 {
 	display: none;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 360px) {
+	div.contentblock {
+		width: 360px;
+	}
+
     .Header_el > p, .Header_el > img:first-child {
     	display: none;
     }
@@ -263,4 +265,10 @@ h2 {
     	margin: 0 auto;
     	width: 100%;
     }
+}
+
+@media (max-width: 560px) {
+	.Header_el > p {
+		display: none;
+	}
 }
