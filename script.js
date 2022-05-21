@@ -57,6 +57,7 @@ document.getElementById('clear_filter').onclick = function() {
 document.getElementById('go_filter').onclick = function() {
     filter_collection();
     refresh_option();
+    document.getElementById('return_home').dispatchEvent(new Event('click'));
 };
 
 function show_form() {
@@ -359,15 +360,18 @@ function hide_collection() {
 }
 
 function refresh_option() {
+    var 
+        genre = document.getElementById('filter_genre_input').value,
+        country = document.getElementById('filter_country_input').value;
     document.querySelectorAll('option').forEach(e => {
         if (e.value != '0') {
             e.remove();
         }
     });
-    download_option();
+    download_option(genre, country);
 }
 
-function download_option() {
+function download_option(genre, country) {
     var 
         genre_collection = new Map(),
         country_collection = new Map();
@@ -387,6 +391,9 @@ function download_option() {
             }
         });
     });
+
+    document.getElementById('filter_genre_input').value = genre;
+    document.getElementById('filter_country_input').value = country;
 }
 
 function create_option(id, value) {

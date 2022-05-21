@@ -281,18 +281,18 @@ form > div > input, #scenario_input {
     	margin: 0 auto;
     	width: 100%;
     }
-
-    #remove_item {
-		opacity: 0.7;
-	}
-
-	.Container {
-		margin-bottom: 20px;
-	}
 }
 
 @media (max-width: 560px) {
 	.Header_el > p {
 		display: none;
+	}
+
+	#remove_item {
+		opacity: 0.4;
+	}
+
+	.Container {
+		margin-bottom: 0;
 	}
 }
