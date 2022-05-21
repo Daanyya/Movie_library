@@ -1,6 +1,10 @@
 *, body {
 	padding: 0;
 	margin: 0;
+	-ms-user-select: none; 
+	-moz-user-select: none; 
+	-webkit-user-select: none; 
+	user-select: none;
 }
 
 p {
@@ -10,6 +14,13 @@ p {
 html {
 	background-color: #d9cc5b;
 }
+
+label {
+	font-size: 18px;
+	text-align: center;
+	width: 206px;
+}
+
 
 /********************Header***/
 
@@ -116,6 +127,7 @@ form > div {
 #poster {
 	width: 200px;
 	height: 200px;
+	border: 2px solid;
 }
 
 #remove_item {
@@ -252,6 +264,10 @@ h2 {
 	display: none;
 }
 
+form > div > input, #scenario_input {
+	width: 206px;
+}
+
 @media (max-width: 360px) {
 	div.contentblock {
 		width: 360px;
@@ -265,6 +281,14 @@ h2 {
     	margin: 0 auto;
     	width: 100%;
     }
+
+    #remove_item {
+		opacity: 0.7;
+	}
+
+	.Container {
+		margin-bottom: 20px;
+	}
 }
 
 @media (max-width: 560px) {

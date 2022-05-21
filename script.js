@@ -115,8 +115,12 @@ function show_correct() {
 
     if (correct.style.display == 'flex') {
         correct.style.display = 'none';
+        show_filter_el();
+        show_add_el();
    } else {
         correct.style.display = 'flex';
+        hide_filter_el();
+        hide_add_el();
    }
 }
 
@@ -147,29 +151,47 @@ function filter_collection() {
     main_collection.forEach((value, key) => {
         var 
             date = value[1].date,
-            genre = value[1].genre,
-            country = value[1].country;
+            genre = value[1].genre.toLowerCase().split(','),
+            country = value[1].country.toLowerCase().split(',');
 
-        if (min_date != '' && max_date != '') {
-            if (new Date(max_date) <= new Date(date) 
-                && new Date(min_date) >= new Date(date)) {
-                main_collection.delete(key);
-                return;
-            } else {console.log('date ok');}
+        if (min_date != '' && new Date(min_date) >= new Date(date)) {
+            main_collection.delete(key);
+            return;
+        }
+
+        if (max_date != '' && new Date(max_date) <= new Date(date)) {
+            main_collection.delete(key);
+            return;
         }
 
         if (genre_filter != '0') {
-            if (genre_filter.toLowerCase() != genre.toLowerCase()) {
+            var flag = 0;
+
+            genre.forEach(e => {
+                if (e == genre_filter) {
+                    flag = 1;
+                }
+            });
+
+            if (flag == 0) {
                 main_collection.delete(key);
                 return;
-            } else {console.log('genre ok');}
+            }
         }
 
         if (country_filter != '0') {
-            if (country_filter.toLowerCase() != country.toLowerCase()) {
+            var flag = 0;
+
+            country.forEach(e => {
+                if (e == country_filter) {
+                    flag = 1;
+                }
+            });
+
+            if (flag == 0) {
                 main_collection.delete(key);
                 return;
-            } else {console.log('country ok');}
+            }
         }
     });
 }
@@ -273,19 +295,25 @@ document.addEventListener("click", e => {
         name = e.target.name;
 
     if (id == 'remove_item') {
+        name = name.toLowerCase();
         document.querySelectorAll("div[name='" + name + "']")[0].remove();
         delete_movie(name.toLowerCase());
+        if (document.getElementById('add_el').style.display == 'none') {
+            document.getElementById('home').dispatchEvent(new Event('click'));
+        }
     }
 });
 
 function delete_movie(name) {
     localStorage.removeItem(name + '_movie');
     localStorage.removeItem(name + '_poster');
+    localStorage.removeItem(name + '_comment');
 }
 
 function form_reset() {
     var preview = document.getElementById('poster_preview');
     form.reset();
+    document.getElementById('time_input').value = '02:00'
     preview.src = 'img/No_film.png';
 }
 
@@ -340,21 +368,24 @@ function refresh_option() {
 }
 
 function download_option() {
-    main_collection.forEach((value, key) => {
-        var 
-            genre_collection = new Map(),
-            country_collection = new Map();
+    var 
+        genre_collection = new Map(),
+        country_collection = new Map();
 
-        if (!genre_collection.has(value[1].genre)
-            && value[1].genre != '') {
-            genre_collection.set(key, value[1].genre);
-            create_option("filter_genre_input", value[1].genre);
-        }
-        if (!country_collection.has(value[1].country)
-            && value[1].country != '') {
-            country_collection.set(key, value[1].country);
-            create_option("filter_country_input", value[1].country);
-        }
+    main_collection.forEach((value, key) => {
+        value[1].genre.split(',').forEach(e => {
+            if (!genre_collection.has(e)) {
+                genre_collection.set(e, e);
+                create_option("filter_genre_input", e);
+            }
+        });
+
+        value[1].country.split(',').forEach(e => {
+            if (!country_collection.has(e)) {
+                country_collection.set(e, e);
+                create_option("filter_country_input", e);
+            }
+        });
     });
 }
 
@@ -379,6 +410,7 @@ function create_item(item, id) {
         conteiner = document.getElementById(id);
 
     div_item.setAttribute("class", 'Item');
+    div_item.setAttribute("name", item[1].name.toLowerCase());
     img_poster.setAttribute("id", 'poster');
     img_poster.setAttribute("src", item[0]);
     img_poster.setAttribute("name", item[1].name.toLowerCase());
@@ -498,17 +530,16 @@ document.getElementById('send_comment').onclick = function() {
         rating = document.getElementById('comment_input_rating').value,
         comment;
 
-    save_name = save_name + '_comment';
-
     comment = new Comment({
         autor: autor,
         text: comment,
         rating: rating
     });
 
-    localStorage.setItem(save_name, JSON.stringify(comment));
+    localStorage.setItem(save_name + '_comment', JSON.stringify(comment));
     reset_my_comment();
     hide_my_comment();
+    download_collection();
     download_comments(main_collection.get(save_name));
 }
 
@@ -530,9 +561,11 @@ function reset_my_comment() {
 
 function download_comments(item) {
     refresh_comments();
-    
+
     if (item[2] == null) {
-        show_my_comment();
+       show_my_comment();
+    } else {
+        hide_my_comment();
     }
     create_comment(item, 'movie_comments_container');
 }
@@ -554,7 +587,13 @@ function create_comment(item, id) {
         p_comment_info.setAttribute("id", 'comment_autor');
         p_comment_content.setAttribute("id", 'comment_content');
 
-        p_comment_info.innerText = item[2].autor + ' (оценка ' + item[2].rating + ' из 10)';
+        var autor = item[2].autor;
+        if (autor.length <= 1) {
+            p_comment_info.innerText = 'Аноним' + ' (оценка ' + item[2].rating + ' из 10)';
+        } else {
+            p_comment_info.innerText = autor + ' (оценка ' + item[2].rating + ' из 10)';
+        }
+
         p_comment_content.innerText = item[2].text;
 
         div_comment.appendChild(p_comment_info);
